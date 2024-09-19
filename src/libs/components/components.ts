@@ -1,1 +1,1 @@
-export { CurrencyField } from "./currency-field/CurrencyField.tsx";
+export { CurrencyField } from "./currency-field/CurrencyField";
