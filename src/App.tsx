@@ -1,8 +1,7 @@
 import { useState } from "react";
 import reactLogo from "./assets/react.svg";
-import "./App.css";
 import { CurrencyField } from "./libs/components/components.ts";
-import "./App.css";
+import "./libs/styles/global.scss";
 
 const App: React.FC = () => {
 	const [currencyOne, setCurrencyOne] = useState<string>("USD");
