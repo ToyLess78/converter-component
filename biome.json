@@ -1,0 +1,35 @@
+{
+	"$schema": "https://biomejs.dev/schema.json",
+	"formatter": {
+		"enabled": true
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"complexity": {
+				"noForEach": "off"
+			},
+			"a11y": {
+				"noSvgWithoutTitle": "off",
+				"useButtonType": "off",
+				"noLabelWithoutControl": "off",
+				"useKeyWithClickEvents": "off",
+				"useFocusableInteractive": "off",
+				"useSemanticElements": "off"
+			},
+			"correctness": {
+				"useExhaustiveDependencies": "off"
+			},
+			"security": {
+				"noDangerouslySetInnerHtml": "off"
+			},
+			"style": {
+				"noNonNullAssertion": "off"
+			},
+			"suspicious": {
+				"noExplicitAny": "off"
+			}
+		}
+	}
+}
