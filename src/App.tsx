@@ -1,17 +1,59 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
 import reactLogo from "./assets/react.svg";
 import { type CurrencyRate, getExchangeRates } from "./libs/api/api";
 import { CurrencyField } from "./libs/components/components";
-import "./libs/styles/global.scss";
 import { CurrencyCode } from "./libs/enums/enums";
+import "./libs/styles/global.scss";
+
+const SET_FROM_CURRENCY = "SET_FROM_CURRENCY";
+const SET_TO_CURRENCY = "SET_TO_CURRENCY";
+const SET_FROM_AMOUNT = "SET_FROM_AMOUNT";
+const SET_TO_AMOUNT = "SET_TO_AMOUNT";
+const SET_RATE = "SET_RATE";
+
+interface State {
+	fromCurrency: CurrencyCode;
+	fromAmount: number;
+	toCurrency: CurrencyCode;
+	toAmount: number;
+	rate: number;
+}
+
+const initialState: State = {
+	fromCurrency: CurrencyCode.USD,
+	fromAmount: 100,
+	toCurrency: CurrencyCode.UAH,
+	toAmount: 200,
+	rate: 1,
+};
+
+type Action =
+	| { type: typeof SET_FROM_CURRENCY; payload: CurrencyCode }
+	| { type: typeof SET_TO_CURRENCY; payload: CurrencyCode }
+	| { type: typeof SET_FROM_AMOUNT; payload: number }
+	| { type: typeof SET_TO_AMOUNT; payload: number }
+	| { type: typeof SET_RATE; payload: number };
+
+const currencyConverterReducer = (state: State, action: Action): State => {
+	switch (action.type) {
+		case SET_FROM_CURRENCY:
+			return { ...state, fromCurrency: action.payload };
+		case SET_TO_CURRENCY:
+			return { ...state, toCurrency: action.payload };
+		case SET_FROM_AMOUNT:
+			return { ...state, fromAmount: action.payload };
+		case SET_TO_AMOUNT:
+			return { ...state, toAmount: action.payload };
+		case SET_RATE:
+			return { ...state, rate: action.payload };
+		default:
+			return state;
+	}
+};
 
 const App: React.FC = () => {
-	const [fromCurrency, setFromCurrency] = useState<string>(CurrencyCode.USD);
-	const [fromAmount, setFromAmount] = useState<number>(100);
-	const [toCurrency, setToCurrency] = useState<string>(CurrencyCode.UAH);
-	const [toAmount, setToAmount] = useState<number>(200);
-	const [rate, setRate] = useState<number>(1);
+	const [state, dispatch] = useReducer(currencyConverterReducer, initialState);
 
 	const currencyOptions: CurrencyCode[] = [
 		CurrencyCode.USD,
@@ -23,11 +65,7 @@ const App: React.FC = () => {
 		CurrencyCode.JPY,
 	];
 
-	const {
-		data: exchangeRates,
-		isLoading,
-		error,
-	} = useQuery<CurrencyRate[]>({
+	const { data: exchangeRates, isLoading, error } = useQuery<CurrencyRate[]>({
 		queryKey: ["exchangeRates"],
 		queryFn: getExchangeRates,
 		select: (data) => {
@@ -36,41 +74,36 @@ const App: React.FC = () => {
 		},
 	});
 
-	const converter = (isReversed = false) => {
+	const convertCurrency = (reverseConversion: boolean = false) => {
 		if (!exchangeRates) return;
 
-		const fromCurrencyRate = exchangeRates.find((cc) => cc.cc === fromCurrency);
-		const toCurrencyRate = exchangeRates.find((cc) => cc.cc === toCurrency);
+		const fromCurrencyRate = exchangeRates.find((cc) => cc.cc === state.fromCurrency);
+		const toCurrencyRate = exchangeRates.find((cc) => cc.cc === state.toCurrency);
 
 		if (!fromCurrencyRate || !toCurrencyRate) return;
 
-		const currentRate = fromCurrencyRate.rate / toCurrencyRate.rate;
-		setRate(currentRate);
+		const calculatedRate = fromCurrencyRate.rate / toCurrencyRate.rate;
+		dispatch({ type: SET_RATE, payload: calculatedRate });
 
-		if (isReversed) {
-			setFromAmount((toAmount / currentRate).toFixed(2) as unknown as number);
-		} else {
-			setToAmount((fromAmount * currentRate).toFixed(2) as unknown as number);
-		}
+		const convertedAmount = reverseConversion
+			? (state.toAmount / calculatedRate).toFixed(2)
+			: (state.fromAmount * calculatedRate).toFixed(2);
+
+		const actionType = reverseConversion ? SET_FROM_AMOUNT : SET_TO_AMOUNT;
+		dispatch({ type: actionType, payload: Number(convertedAmount) });
 	};
 
 	useEffect(() => {
-		converter(false);
-	}, [fromCurrency, toCurrency, fromAmount, exchangeRates]);
+		convertCurrency(false);
+	}, [state.fromCurrency, state.toCurrency, state.fromAmount, exchangeRates]);
 
-	if (isLoading) {
-		return <div>Loading...</div>;
-	}
-
-	if (error) {
-		return <div>Error fetching exchange rates</div>;
-	}
+	if (isLoading) return <div>Loading...</div>;
+	if (error) return <div>Error fetching exchange rates</div>;
 
 	const handleSwap = () => {
-		const tempCurrency = fromCurrency;
-		setFromCurrency(toCurrency);
-		setToCurrency(tempCurrency);
-		converter(false);
+		dispatch({ type: SET_FROM_CURRENCY, payload: state.toCurrency });
+		dispatch({ type: SET_TO_CURRENCY, payload: state.fromCurrency });
+		convertCurrency(false);
 	};
 
 	return (
@@ -80,19 +113,21 @@ const App: React.FC = () => {
 				<b>Currency Converter</b>
 			</div>
 			<div>
-				<a href="https://react.dev" target="_blank" rel="noreferrer">
+				<a href="" target="_blank" rel="noreferrer">
 					<img src={reactLogo} className="logo react" alt="React logo" />
 				</a>
 			</div>
 			<CurrencyField
 				selectId="from-currency"
 				inputId="from-amount"
-				selectValue={fromCurrency}
-				inputValue={fromAmount}
-				onSelectChange={(e) => setFromCurrency(e.target.value)}
+				selectValue={state.fromCurrency}
+				inputValue={state.fromAmount}
+				onSelectChange={(e) =>
+					dispatch({ type: SET_FROM_CURRENCY, payload: e.target.value as CurrencyCode })
+				}
 				onInputChange={(e) => {
-					setFromAmount(Number(e.target.value));
-					converter(false);
+					dispatch({ type: SET_FROM_AMOUNT, payload: Number(e.target.value) });
+					convertCurrency(false);
 				}}
 				options={currencyOptions}
 			/>
@@ -102,19 +137,21 @@ const App: React.FC = () => {
 					Swap
 				</button>
 				<div className="rate" id="rate">
-					{`1 ${fromCurrency} = ${rate.toFixed(4)} ${toCurrency}`}
+					{`1 ${state.fromCurrency} = ${state.rate.toFixed(4)} ${state.toCurrency}`}
 				</div>
 			</div>
 
 			<CurrencyField
 				selectId="to-currency"
 				inputId="to-amount"
-				selectValue={toCurrency}
-				inputValue={toAmount}
-				onSelectChange={(e) => setToCurrency(e.target.value)}
+				selectValue={state.toCurrency}
+				inputValue={state.toAmount}
+				onSelectChange={(e) =>
+					dispatch({ type: SET_TO_CURRENCY, payload: e.target.value as CurrencyCode })
+				}
 				onInputChange={(e) => {
-					setToAmount(Number(e.target.value));
-					converter(true);
+					dispatch({ type: SET_TO_AMOUNT, payload: Number(e.target.value) });
+					convertCurrency(true);
 				}}
 				options={currencyOptions}
 			/>
