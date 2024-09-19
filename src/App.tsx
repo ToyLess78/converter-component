@@ -1,35 +1,56 @@
 import { useState } from "react";
-import viteLogo from "/vite.svg";
 import reactLogo from "./assets/react.svg";
 import "./App.css";
+import { CurrencyField } from "./libs/components/components.ts";
+import "./App.css";
 
-function App() {
-	const [count, setCount] = useState(0);
+const App: React.FC = () => {
+	const [currencyOne, setCurrencyOne] = useState<string>("USD");
+	const [amountOne, setAmountOne] = useState<number>(100);
+	const [currencyTwo, setCurrencyTwo] = useState<string>("UAH");
+	const [amountTwo, setAmountTwo] = useState<number>(200);
+
+	const currencyOptions: string[] = ["USD", "EUR", "UAH", "CAD", "CHF", "ILS", "JPY"];
 
 	return (
-		<>
+		<div className="container">
+			<div className="header">
+				<div className="indent-right"></div>
+				<b>Currency Converter</b>
+			</div>
 			<div>
-				<a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-					<img src={viteLogo} className="logo" alt="Vite logo" />
-				</a>
 				<a href="https://react.dev" target="_blank" rel="noreferrer">
 					<img src={reactLogo} className="logo react" alt="React logo" />
 				</a>
 			</div>
-			<h1>Vite + React</h1>
-			<div className="card">
-				<button onClick={() => setCount((count) => count + 1)}>
-					count is {count}
+			<CurrencyField
+				selectId="currency-one"
+				inputId="amount-one"
+				selectValue={currencyOne}
+				inputValue={amountOne}
+				onSelectChange={(e) => setCurrencyOne(e.target.value)}
+				onInputChange={(e) => setAmountOne(Number(e.target.value))}
+				options={currencyOptions}
+			/>
+
+			<div className="swap-rate-container">
+				<button className="btn" id="swap">
+					{/* Swap button with SVG */}
 				</button>
-				<p>
-					Edit <code>src/App.tsx</code> and save to test HMR
-				</p>
+				<div className="rate" id="rate"></div>
 			</div>
-			<p className="read-the-docs">
-				Click on the Vite and React logos to learn more
-			</p>
-		</>
+
+			<CurrencyField
+				selectId="currency-two"
+				inputId="amount-two"
+				selectValue={currencyTwo}
+				inputValue={amountTwo}
+				onSelectChange={(e) => setCurrencyTwo(e.target.value)}
+				onInputChange={(e) => setAmountTwo(Number(e.target.value))}
+				options={currencyOptions}
+			/>
+		</div>
 	);
-}
+};
 
 export default App;
