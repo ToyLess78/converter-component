@@ -33,7 +33,7 @@ jobs:
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
-          source: ./
+          path: ./dist
           destination: ./_site
         env:
           VITE_API_EXCHANGE_RATES_URL: ${{ secrets.VITE_API_EXCHANGE_RATES_URL }}
