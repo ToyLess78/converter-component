@@ -15,9 +15,7 @@ interface ExchangeRateApiResponse {
 }
 
 export const getExchangeRates = async (): Promise<CurrencyRate[]> => {
-	const response = await fetch(
-		"https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json",
-	);
+	const response = await fetch(import.meta.env.VITE_API_EXCHANGE_RATES_URL);
 	if (!response.ok) {
 		throw new Error(ExceptionMessage.FailedToFetchExchangeRates);
 	}
