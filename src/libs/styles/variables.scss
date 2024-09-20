@@ -1,11 +1,12 @@
-$primary-color: #646cff;
-$secondary-color: #535bf2;
-$background-dark: #242424;
-$background-light: #ffffff;
-$drop-shadow-dark: #646cffaa;
-$drop-shadow-light: #61dafbaa;
-$font-color-dark: rgba(255, 255, 255, 0.87);
-$font-color-light: #213547;
-$link-hover-light: #747bff;
-$button-background-dark: #1a1a1a;
-$button-background-light: #f9f9f9;
+$primary-color: rgba(121, 213, 246, 0.75);
+$primary-shadow: 0 0 3px rgba(121, 213, 246, 0.3);
+$secondary-color: rgb(35, 61, 116);
+$dark-color: rgb(20, 20, 23);
+$drop-shadow-dark: rgb(23, 28, 62);
+$font-color: rgba(255, 255, 255, 0.87);
+$background-gradient: radial-gradient(
+                134.13% 134.13% at 50% 50%,
+                $secondary-color 0%,
+                $drop-shadow-dark 57.44%,
+                $dark-color 100%
+);

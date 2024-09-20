@@ -3,3 +3,13 @@
   justify-content: center;
   align-items: center;
 }
+@mixin reset-element {
+  background-color: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  outline: none;
+  cursor: pointer;
+  box-shadow: none;
+}

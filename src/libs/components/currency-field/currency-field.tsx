@@ -1,5 +1,6 @@
-import { CurrencyInput } from "../currency-input/CurrencyInput";
-import { CurrencySelect } from "../currency-select/CurrencySelect";
+import styles from "./currency-field.module.scss";
+import { Input } from "./input/input";
+import { Select } from "./select/select";
 
 interface CurrencyFieldProps {
 	selectId: string;
@@ -21,14 +22,14 @@ export const CurrencyField: React.FC<CurrencyFieldProps> = ({
 	options,
 }) => {
 	return (
-		<div className="currency">
-			<CurrencySelect
+		<div className={styles.currency}>
+			<Select
 				id={selectId}
 				value={selectValue}
 				onChange={onSelectChange}
 				options={options}
 			/>
-			<CurrencyInput
+			<Input
 				id={inputId}
 				placeholder="200"
 				value={inputValue}

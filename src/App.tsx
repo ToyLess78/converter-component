@@ -1,7 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import reactLogo from "./assets/react.svg";
 import { type CurrencyRate, getExchangeRates } from "./libs/api/api";
-import { CurrencyField } from "./libs/components/components";
+import {
+	CurrencyField,
+	Footer,
+	Header,
+	Logo,
+	SwapButton,
+} from "./libs/components/components";
 import {
 	SET_FROM_AMOUNT,
 	SET_FROM_CURRENCY,
@@ -34,14 +39,11 @@ const App: React.FC = () => {
 	if (error) return <div>Error fetching exchange rates</div>;
 
 	return (
-		<div className="container">
-			<div className="header">
-				<div className="indent-right" />
-				<b>Currency Converter</b>
-			</div>
-			<div>
-				<img src={reactLogo} className="logo react" alt="React logo" />
-			</div>
+		<>
+			<Header
+				rateText={`1 ${state.fromCurrency} = ${state.rate.toFixed(2)} ${state.toCurrency}`}
+			/>
+			<Logo />
 			<CurrencyField
 				selectId="from-currency"
 				inputId="from-amount"
@@ -60,14 +62,7 @@ const App: React.FC = () => {
 				options={currencyOptions}
 			/>
 
-			<div className="swap-rate-container">
-				<button className="btn" id="swap" onClick={handleSwap}>
-					Swap
-				</button>
-				<div className="rate" id="rate">
-					{`1 ${state.fromCurrency} = ${state.rate.toFixed(2)} ${state.toCurrency}`}
-				</div>
-			</div>
+			<SwapButton onClick={handleSwap} />
 
 			<CurrencyField
 				selectId="to-currency"
@@ -86,7 +81,8 @@ const App: React.FC = () => {
 				}}
 				options={currencyOptions}
 			/>
-		</div>
+			<Footer />
+		</>
 	);
 };
 

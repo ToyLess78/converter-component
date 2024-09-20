@@ -4,7 +4,7 @@ import {
 	SET_RATE,
 	SET_TO_AMOUNT,
 	SET_TO_CURRENCY,
-} from "../../constants/actions";
+} from "../../constants/constants";
 import { CurrencyCode } from "../../enums/enums";
 
 interface State {

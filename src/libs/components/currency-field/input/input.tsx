@@ -1,11 +1,11 @@
-interface CurrencyInputProps {
+interface InputProps {
 	id: string;
 	placeholder: string;
 	value: number;
 	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const CurrencyInput: React.FC<CurrencyInputProps> = ({
+export const Input: React.FC<InputProps> = ({
 	id,
 	placeholder,
 	value,
@@ -18,6 +18,7 @@ export const CurrencyInput: React.FC<CurrencyInputProps> = ({
 			placeholder={placeholder}
 			value={value}
 			onChange={onChange}
+			min="0"
 		/>
 	);
 };

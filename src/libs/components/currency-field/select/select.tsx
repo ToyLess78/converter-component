@@ -5,7 +5,7 @@ interface CurrencySelectProps {
 	options: string[];
 }
 
-export const CurrencySelect: React.FC<CurrencySelectProps> = ({
+export const Select: React.FC<CurrencySelectProps> = ({
 	id,
 	value,
 	onChange,

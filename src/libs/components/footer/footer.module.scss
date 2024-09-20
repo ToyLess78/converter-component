@@ -1,0 +1,19 @@
+@import "../../styles/variables";
+
+.footer {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  box-shadow: $primary-shadow;
+  padding: .4rem 0;
+
+  a {
+    font-size: .7rem;
+    text-decoration: inherit;
+    color: inherit;
+
+    &:hover {
+      color: $primary-color;
+    }
+  }
+}

@@ -1,1 +1,1 @@
-export { useCurrencyConverter } from "./currency-converter/useCurrencyConverter";
+export { useCurrencyConverter } from "./currency-converter/use-currency-converter.hook";

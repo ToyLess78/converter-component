@@ -6,11 +6,11 @@ import {
 	SET_RATE,
 	SET_TO_AMOUNT,
 	SET_TO_CURRENCY,
-} from "../../constants/actions";
+} from "../../constants/constants";
 import {
 	currencyConverterReducer,
 	initialState,
-} from "./currencyConverterReducer";
+} from "./currency-converter-reducer";
 
 export const useCurrencyConverter = (
 	exchangeRates: CurrencyRate[] | undefined,
