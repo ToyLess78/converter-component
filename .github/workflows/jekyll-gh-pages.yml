@@ -1,22 +1,21 @@
-# Sample workflow for building and deploying a Jekyll site to GitHub Pages
-name: Deploy Jekyll with GitHub Pages dependencies preinstalled
+# Workflow for building and deploying a JavaScript project (e.g., Vite) to GitHub Pages
+name: Deploy Project to GitHub Pages
 
 on:
-  # Runs on pushes targeting the default branch
+  # Run workflow on push to the main branch
   push:
     branches: ["main"]
 
-  # Allows you to run this workflow manually from the Actions tab
+  # Allows manual run from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+# Permissions required for GitHub Pages deployment
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+# Prevent multiple deployments at the same time
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -26,21 +25,38 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
+
+      - name: Remove existing node_modules and package-lock.json
+        run: |
+          rm -rf node_modules
+          rm -f package-lock.json
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          path: ./dist
-          destination: ./_site
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      # Add environment variables here
+      - name: Build the project
+        run: npm run build
         env:
           VITE_API_EXCHANGE_RATES_URL: ${{ secrets.VITE_API_EXCHANGE_RATES_URL }}
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
 
-  # Deployment job
+      - name: Create 404.html file
+        run: |
+          echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; URL=./index.html" /></head><body></body></html>' > dist/404.html
+
+      - name: Upload build artifacts
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  # Deploy job
   deploy:
     environment:
       name: github-pages
