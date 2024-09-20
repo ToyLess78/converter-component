@@ -41,11 +41,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # Add environment variables here
+      - name: Load environment variables from .env.example
+        run: cp .env.example .env
+
       - name: Build the project
         run: npm run build
-        env:
-          VITE_API_EXCHANGE_RATES_URL: ${{ secrets.VITE_API_EXCHANGE_RATES_URL }}
 
       - name: Create 404.html file
         run: |
