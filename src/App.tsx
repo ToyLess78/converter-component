@@ -14,7 +14,7 @@ import {
 	SET_TO_CURRENCY,
 } from "./libs/constants/actions";
 import { currencyOptions } from "./libs/constants/currency-options";
-import type { CurrencyCode } from "./libs/enums/enums";
+import { type CurrencyCode, ExceptionMessage } from "./libs/enums/enums";
 import { useCurrencyConverter } from "./libs/hooks/hooks";
 import "./libs/styles/global.scss";
 
@@ -36,7 +36,7 @@ const App: React.FC = () => {
 		useCurrencyConverter(exchangeRates);
 
 	if (isLoading) return <div>Loading...</div>;
-	if (error) return <div>Error fetching exchange rates</div>;
+	if (error) return <div>{ExceptionMessage.ErrorFetchingExchangeRates}</div>;
 
 	return (
 		<>

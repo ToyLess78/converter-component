@@ -1,9 +1,2 @@
-export enum CurrencyCode {
-	USD = "USD",
-	EUR = "EUR",
-	UAH = "UAH",
-	CAD = "CAD",
-	CHF = "CHF",
-	ILS = "ILS",
-	JPY = "JPY",
-}
+export { ExceptionMessage } from "./exception-message.enum";
+export { type CurrencyCode } from "./сurrency-сode.enum";

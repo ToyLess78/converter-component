@@ -1,3 +1,5 @@
+import { ExceptionMessage } from "../../enums/enums";
+
 export interface CurrencyRate {
 	txt: string;
 	rate: number;
@@ -17,7 +19,7 @@ export const getExchangeRates = async (): Promise<CurrencyRate[]> => {
 		"https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json",
 	);
 	if (!response.ok) {
-		throw new Error("Failed to fetch exchange rates");
+		throw new Error(ExceptionMessage.FailedToFetchExchangeRates);
 	}
 
 	const data: ExchangeRateApiResponse[] = await response.json();
