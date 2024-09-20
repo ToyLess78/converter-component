@@ -1,5 +1,6 @@
 import styles from "./logo.module.scss";
 
 export const Logo: React.FC = () => {
-	return <img src="/logo.png" className={styles.logo} alt="Logo" />;
+	const logoPath = `${import.meta.env.VITE_BASE_URL || "/"}logo.png`;
+	return <img src={logoPath} className={styles.logo} alt="Logo" />;
 };

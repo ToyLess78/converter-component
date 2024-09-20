@@ -7,7 +7,7 @@ export default defineConfig(({ mode }) => {
 
 	return {
 		plugins: [react()],
-		base: "/converter-component/",
+		base: env.VITE_BASE_URL || "/",
 		define: {
 			"process.env": {
 				VITE_API_EXCHANGE_RATES_URL: env.VITE_API_EXCHANGE_RATES_URL,
